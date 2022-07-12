@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import { Component, useContext } from "react";
+import { Component } from "react";
 import { useParams } from "react-router-dom";
 import Carousel from "./Carousel";
 import ErrorBoundary from "./ErrorBoundary";
@@ -14,33 +13,29 @@ class Details extends Component {
       `http://pets-v2.dev-apis.com/pets?id=${this.props.params.id}`
     );
     const json = await res.json();
-
-    this.setState({ loading: false, ...json.pets[0] });
+    this.setState(Object.assign({ loading: false }, json.pets[0]));
   }
-
   toggleModal = () => this.setState({ showModal: !this.state.showModal });
+  adopt = () => (window.location = "http://bit.ly/pet-adopt");
   render() {
-    if (this.state.lodaing) {
-      return <h2>loading ... </h2>;
+    if (this.state.loading) {
+      return <h2>loading … </h2>;
     }
 
     const { animal, breed, city, state, description, name, images, showModal } =
       this.state;
 
     return (
-      <div className="my-0 mx-auto w-11/12">
+      <div className="details">
         <Carousel images={images} />
-        <div className="p-10">
-          <h1 className="">{name}</h1>
-          <h2>
-            {animal} - {breed} - {city}, {state}
-          </h2>
+        <div>
+          <h1>{name}</h1>
+          <h2>{`${animal} — ${breed} — ${city}, ${state}`}</h2>
           <ThemeContext.Consumer>
             {([theme]) => (
               <button
                 onClick={this.toggleModal}
                 style={{ backgroundColor: theme }}
-                className="rounded px-6 py-2 text-white hover:opacity-50 border-none"
               >
                 Adopt {name}
               </button>
@@ -52,7 +47,7 @@ class Details extends Component {
               <div>
                 <h1>Would you like to adopt {name}?</h1>
                 <div className="buttons">
-                  <a href={"https://bit.ly/pet-adopt"}>Yes</a>
+                  <a href="https://bit.ly/pet-adopt">Yes</a>
                   <button onClick={this.toggleModal}>No</button>
                 </div>
               </div>
@@ -66,7 +61,6 @@ class Details extends Component {
 
 const WrappedDetails = () => {
   const params = useParams();
-  const [theme] = useContext(ThemeContext);
   return (
     <ErrorBoundary>
       <Details params={params} />
