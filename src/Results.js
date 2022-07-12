@@ -1,23 +1,24 @@
-/* eslint-disable no-unused-vars */
 import Pet from "./Pet";
 
 const Results = ({ pets }) => {
   return (
-    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="search">
       {!pets.length ? (
-        <h1>No Pets found</h1>
+        <h1>No Pets Found</h1>
       ) : (
-        pets.map((pet) => (
-          <Pet
-            name={pet.name}
-            animal={pet.animal}
-            breed={pet.breed}
-            key={pet.id}
-            images={pet.images}
-            location={`${pet.city}, ${pet.state}`}
-            id={pet.id}
-          />
-        ))
+        pets.map((pet) => {
+          return (
+            <Pet
+              animal={pet.animal}
+              key={pet.id}
+              name={pet.name}
+              breed={pet.breed}
+              images={pet.images}
+              location={`${pet.city}, ${pet.state}`}
+              id={pet.id}
+            />
+          );
+        })
       )}
     </div>
   );
